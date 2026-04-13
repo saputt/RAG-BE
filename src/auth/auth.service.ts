@@ -5,10 +5,11 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { LoginDto, RegisterDto } from './dto/auth.dto';
+import { RegisterDto } from './dto/register.dto';
 import { AuthRepository } from './auth.repository';
 import { JwtService } from '@nestjs/jwt';
 import { hashing } from 'src/common/utils/hash.util';
+import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
@@ -18,7 +19,7 @@ export class AuthService {
   ) {}
 
   private async signToken(userId: string, email: string) {
-    const payload = { sub: userId, email };
+    const payload = { id: userId, email };
 
     const token = await this.jwt.signAsync(payload, {
       secret: process.env.JWT_SECRET,

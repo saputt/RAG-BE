@@ -8,5 +8,6 @@ import { RoomRepository } from './room.repository';
   controllers: [RoomController],
   providers: [RoomService, RoomRepository],
   imports: [PrismaModule],
+  exports: [RoomRepository],
 })
 export class RoomModule {}

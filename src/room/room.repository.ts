@@ -1,13 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateRoomDto, EditRoomDto } from './dto/room.dto';
+import { CreateRoomDto, EditRoomDto } from './dto/create-room.dto';
 
 @Injectable()
 export class RoomRepository {
   constructor(private prisma: PrismaService) {}
 
-  async getAllRooms() {
-    return await this.prisma.room.findMany();
+  async getAllRooms(id: string) {
+    return await this.prisma.room.findMany({
+      where: {
+        userId: id,
+      },
+      select: {
+        id: true,
+        name: true,
+        createdAt: true,
+      },
+    });
   }
 
   async getRoomById(id: string) {
@@ -18,11 +27,11 @@ export class RoomRepository {
     });
   }
 
-  async createRoom(data: CreateRoomDto) {
+  async createRoom(data: CreateRoomDto, userId: string) {
     return await this.prisma.room.create({
       data: {
         name: data.name,
-        userId: data.userId,
+        userId: userId,
       },
     });
   }
