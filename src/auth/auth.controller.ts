@@ -9,16 +9,19 @@ export class AuthController {
 
   @Post('login')
   async login(@Body() data: LoginDto) {
+    const authData = await this.service.login(data);
     return {
       message: 'Login successfull',
-      data: {
-        accessToken: await this.service.login(data),
-      },
+      data: authData,
     };
   }
 
   @Post('register')
   async register(@Body() data: RegisterDto) {
-    await this.service.register(data);
+    const authData = await this.service.register(data);
+    return {
+      message: 'Register successfull',
+      data: authData,
+    };
   }
 }

@@ -45,6 +45,8 @@ model Message {
   role Role @default(USER)
   roomId String
   room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
 }
 
 enum Role {

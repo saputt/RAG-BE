@@ -38,7 +38,15 @@ export class AuthService {
       isUserExist.password,
     );
     if (!isSamePassword) throw new ForbiddenException('Wrong password');
-    return this.signToken(isUserExist.id, isUserExist.email);
+    const token = await this.signToken(isUserExist.id, isUserExist.email);
+    return {
+      user: {
+        id: isUserExist.id,
+        name: isUserExist.name,
+        email: isUserExist.email,
+      },
+      token,
+    };
   }
 
   async register(data: RegisterDto) {
@@ -51,6 +59,15 @@ export class AuthService {
       email: data.email,
       password: hashedPassword,
     };
-    return this.repo.createNewUser(dataUser);
+    const newUser = await this.repo.createNewUser(dataUser);
+    const token = await this.signToken(newUser.id, newUser.email);
+    return {
+      user: {
+        id: newUser.id,
+        name: newUser.name,
+        email: newUser.email,
+      },
+      token,
+    };
   }
 }

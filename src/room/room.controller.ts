@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { RoomService } from './room.service';
 import { CreateRoomDto, EditRoomDto } from './dto/create-room.dto';

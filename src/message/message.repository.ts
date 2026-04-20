@@ -18,7 +18,24 @@ export class MessageRepository {
     return this.prisma.message.create({
       data: {
         content: data.content,
+        role: data.role || 'USER',
         roomId,
+      },
+    });
+  }
+
+  async getHistoryChat(roomId: string) {
+    return this.prisma.message.findMany({
+      where: {
+        id: roomId,
+      },
+      orderBy: { createdAt: 'desc' },
+      take: 6,
+      select: {
+        content: true,
+        role: true,
+        roomId: true,
+        createdAt: true,
       },
     });
   }

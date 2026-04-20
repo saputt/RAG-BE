@@ -7,6 +7,9 @@ async function bootstrap() {
 
   //memuat default pada awalan API
   app.setGlobalPrefix('api');
+  app.enableCors(
+    
+  );
 
   app.useGlobalPipes(
     new ValidationPipe({

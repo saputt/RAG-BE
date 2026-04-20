@@ -32,9 +32,11 @@ export class RoomService {
 
   async createRoom(data: CreateRoomDto, id: string) {
     const room = await this.repo.createRoom(data, id);
+
     return {
       id: room.id,
       name: room.name,
+      collection_name: room.collectionName,
     };
   }
 }
