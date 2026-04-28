@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { FileRepository } from 'src/file/file.repository';
 import { RoomRepository } from 'src/room/room.repository';
 import { json } from 'stream/consumers';
 
@@ -8,9 +9,15 @@ export class AiService {
   constructor(
     private configService: ConfigService,
     private roomRepo: RoomRepository,
+    private fileRepo: FileRepository,
   ) {}
 
-  async getAiResponse(prompt: string, collectionName: string, history: any[]) {
+  async getAiResponse(
+    prompt: string,
+    collectionName: string,
+    roomid: string,
+    history: any[],
+  ) {
     const pyUrl = this.configService.get<string>('PYTHON_SERVICE_URL');
 
     const response = await fetch(`${pyUrl}/ask`, {
@@ -20,6 +27,7 @@ export class AiService {
         query: prompt,
         collection_name: collectionName,
         history,
+        room_id: roomid,
       }),
     });
 
@@ -32,6 +40,11 @@ export class AiService {
 
   async ingestFile(file: Express.Multer.File, roomId: string) {
     const roomExist = await this.roomRepo.getRoomById(roomId);
+
+    if (!roomExist)
+      throw new NotFoundException(`Room with id : ${roomId} not found`);
+
+    await this.fileRepo;
 
     const pyUrl = this.configService.get<string>('PYTHON_SERVICE_URL');
     const formData = new FormData();

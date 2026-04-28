@@ -23,6 +23,10 @@ export class RoomService {
     const isRoomExist = await this.repo.getRoomById(id);
     if (isRoomExist == null || isRoomExist == undefined)
       throw new NotFoundException(`room with id : ${id} not found`);
+    const roomFiles = await this.repo.getRoomFile(id);
+
+    console.log(`room files : ${roomFiles.files}`);
+
     return await this.repo.deleteRoom(id);
   }
 

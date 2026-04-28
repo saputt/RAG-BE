@@ -26,6 +26,7 @@ export class MessageService {
     const aiAnswer = await this.aiService.getAiResponse(
       data.content,
       roomExist.collectionName,
+      roomId,
       history,
     );
     if (aiAnswer.error) throw new NotFoundException(aiAnswer.error);

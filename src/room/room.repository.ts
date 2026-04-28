@@ -52,4 +52,11 @@ export class RoomRepository {
       data,
     });
   }
+
+  async getRoomFile(roomId: string) {
+    return await this.prisma.room.findFirst({
+      where: { id: roomId },
+      include: { files: true },
+    });
+  }
 }
