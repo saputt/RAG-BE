@@ -5,6 +5,11 @@ export enum MessageRole {
   BOT = 'BOT',
 }
 
+export enum Mode {
+  CHAT = 'CHAT',
+  QUIZ = 'QUIZ',
+}
+
 export class CreateMessageDto {
   @IsNotEmpty()
   @IsString()
@@ -13,4 +18,8 @@ export class CreateMessageDto {
   @IsEnum(MessageRole)
   @IsOptional()
   role?: MessageRole;
+
+  @IsOptional()
+  @IsEnum(Mode)
+  mode: Mode;
 }

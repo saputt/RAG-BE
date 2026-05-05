@@ -28,6 +28,16 @@ export class RoomController {
     };
   }
 
+  @Post('room/quiz/:roomId')
+  async createRoomQuiz(@Param('roomId') roomId: string) {
+    this.service.createRoomQuiz(roomId);
+  }
+
+  @Post('room/message/:roomId')
+  async createRoomMessage(@Param('roomId') roomId: string) {
+    this.service.createRoomMessage(roomId);
+  }
+
   @Post('room')
   async createRoom(@Body() data: CreateRoomDto, @GetUser('id') id: string) {
     const room = await this.service.createRoom(data, id);

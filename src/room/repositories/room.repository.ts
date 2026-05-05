@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateRoomDto, EditRoomDto } from './dto/create-room.dto';
+import { CreateRoomDto, EditRoomDto } from '../dto/create-room.dto';
 
 @Injectable()
 export class RoomRepository {
