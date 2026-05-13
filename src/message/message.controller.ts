@@ -8,21 +8,21 @@ import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 export class MessageController {
   constructor(private service: MessageService) {}
 
-  @Get('messages/:roomId')
-  async getAllMessage(@Param('roomId') id: string) {
-    const messages = await this.service.getAllRoomMessage(id);
+  @Get('messages/:roomMessageId')
+  async getAllMessage(@Param('roomMessageId') roomMessageId: string) {
+    const messages = await this.service.getAllRoomMessage(roomMessageId);
     return {
-      message: `get all messages with roomId : ${id} successfully`,
+      message: `get all messages with roomId : ${roomMessageId} successfully`,
       data: messages,
     };
   }
 
-  @Post('message/:roomId')
+  @Post('message/:roomMessageId')
   async createMessage(
     @Body() data: CreateMessageDto,
-    @Param('roomId') roomId: string,
+    @Param('roomMessageId') roomMessageId: string,
   ) {
-    const message = await this.service.createMessage(data, roomId);
+    const message = await this.service.createMessage(data, roomMessageId);
     return {
       message: 'create new message successfully',
       data: message,

@@ -23,7 +23,6 @@ export class RoomOwnerGuard implements CanActivate {
         id: roomId,
       },
     });
-    console.log(room);
     if (!room) throw new NotFoundException('Room not found');
 
     if (room.userId !== user.id)

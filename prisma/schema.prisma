@@ -26,6 +26,45 @@ model Room {
   updatedAt      DateTime @updatedAt
   files          File[]
   user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quizRoom QuizRoom[]
+  chatRoom ChatRoom[]
+}
+
+model QuizRoom {
+  id             String   @id @default(uuid())
+  name String @default("Quiz")
+  roomid String @unique
+  room Room @relation(fields: [roomid], references: [id], onDelete: Cascade)
+  quizzes Quiz[]
+}
+
+model Quiz {
+  id             String   @id @default(uuid())
+  title String
+  quizRoomId String 
+  quizRoom QuizRoom @relation(fields: [quizRoomId], references: [id], onDelete: Cascade)
+  question Question[]
+  finish Boolean @default(false)
+}
+
+model Question {
+  id             String   @id @default(uuid())
+  question String
+  options Json
+  correctAnswer String
+  score Int?
+  userAnswer String?
+
+  quizId String
+  quiz Quiz @relation(fields: [quizId], references: [id], onDelete: Cascade)
+}
+
+model ChatRoom {
+  id             String   @id @default(uuid())
+  name String @default("Chat")
+  roomid String @unique
+  room Room @relation(fields: [roomid], references: [id], onDelete: Cascade)
+
   messages Message[]
 }
 
@@ -47,14 +86,18 @@ model File {
 model Message {
   id String @id @default(uuid())
   content String @db.Text
-  role Role @default(USER)
+  role ROLE @default(USER)
   roomId String
-  room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
-
+  room ChatRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
 }
 
-enum Role {
+enum MODE {
+  CHAT
+  QUIZ
+}
+
+enum ROLE {
   USER
   BOT
 }

@@ -1,15 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { FileRepository } from 'src/file/file.repository';
-import { RoomRepository } from 'src/room/room.repository';
-import { json } from 'stream/consumers';
+import { Mode } from 'src/message/dto/create-message.dto';
+import { RoomRepository } from 'src/room/repositories/room.repository';
 
 @Injectable()
 export class AiService {
   constructor(
     private configService: ConfigService,
     private roomRepo: RoomRepository,
-    private fileRepo: FileRepository,
   ) {}
 
   async getAiResponse(
@@ -17,6 +15,7 @@ export class AiService {
     collectionName: string,
     roomid: string,
     history: any[],
+    mode: Mode,
   ) {
     const pyUrl = this.configService.get<string>('PYTHON_SERVICE_URL');
 
@@ -28,6 +27,7 @@ export class AiService {
         collection_name: collectionName,
         history,
         room_id: roomid,
+        mode,
       }),
     });
 
@@ -43,8 +43,6 @@ export class AiService {
 
     if (!roomExist)
       throw new NotFoundException(`Room with id : ${roomId} not found`);
-
-    await this.fileRepo;
 
     const pyUrl = this.configService.get<string>('PYTHON_SERVICE_URL');
     const formData = new FormData();

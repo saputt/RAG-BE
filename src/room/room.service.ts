@@ -1,11 +1,25 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { RoomRepository } from './room.repository';
 import { CreateRoomDto, EditRoomDto } from './dto/create-room.dto';
+import { RoomRepository } from './repositories/room.repository';
+import { MessageRoomRepository } from './repositories/message-room.repository';
+import { QuizRoomRepository } from './repositories/quiz-room.repository';
 
 @Injectable()
 export class RoomService {
-  constructor(private readonly repo: RoomRepository) {}
+  constructor(
+    private readonly repo: RoomRepository,
+    private readonly repoRoomMessage: MessageRoomRepository,
+    private readonly repoRoomQuiz: QuizRoomRepository,
+  ) {}
+
+  async createRoomQuiz(roomId: string) {
+    return this.repoRoomQuiz.createQuizRoom(roomId);
+  }
+
+  async createRoomMessage(roomId: string) {
+    return this.repoRoomMessage.createMessageRoom(roomId);
+  }
 
   async getAll(id: string) {
     const rooms = await this.repo.getAllRooms(id);
@@ -37,9 +51,12 @@ export class RoomService {
   async createRoom(data: CreateRoomDto, id: string) {
     const room = await this.repo.createRoom(data, id);
 
+    const messageRoom = await this.repoRoomMessage.createMessageRoom(room.id);
+
     return {
       id: room.id,
       name: room.name,
+      chatRoomId: messageRoom.id,
       collection_name: room.collectionName,
     };
   }
