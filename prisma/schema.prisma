@@ -68,6 +68,11 @@ model ChatRoom {
   messages Message[]
 }
 
+model RoomMessage {}
+
+model RoomQuiz {}
+
+
 model File {  
   id        String   @id @default(uuid())
   fileName  String
